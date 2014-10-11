@@ -14,11 +14,11 @@ public class Business {
     public static Business business;
     
     UserAccountDirectory userAccountDirectory;
-    EmplyeeDirectory emplyeeDirectory;
+    EmployeeDirectory employeeDirectory;
     
     private Business() {
         userAccountDirectory = new UserAccountDirectory();
-        emplyeeDirectory = new EmplyeeDirectory();
+        employeeDirectory = new EmployeeDirectory();
     }
     
     public static Business getInstance() {
@@ -36,12 +36,12 @@ public class Business {
         this.userAccountDirectory = userAccountDirectory;
     }
 
-    public EmplyeeDirectory getEmplyeeDirectory() {
-        return emplyeeDirectory;
+    public EmployeeDirectory getEmployeeDirectory() {
+        return employeeDirectory;
     }
 
-    public void setEmplyeeDirectory(EmplyeeDirectory emplyeeDirectory) {
-        this.emplyeeDirectory = emplyeeDirectory;
+    public void setEmployeeDirectory(EmployeeDirectory employeeDirectory) {
+        this.employeeDirectory = employeeDirectory;
     }
     
     

@@ -5,6 +5,11 @@
  */
 package UserInterface.AdminWA;
 
+import Business.EmployeeDirectory;
+import Business.UserAccountDirectory;
+import java.awt.CardLayout;
+import javax.swing.JPanel;
+
 /**
  *
  * @author zhaojiyuan
@@ -14,8 +19,16 @@ public class AdminWAJPanel extends javax.swing.JPanel {
     /**
      * Creates new form AdminWAJPanel
      */
-    public AdminWAJPanel() {
+    
+    JPanel upc;
+    UserAccountDirectory userAccountDirectory;
+    EmployeeDirectory employeeDirectory;
+    
+    public AdminWAJPanel(JPanel upc,EmployeeDirectory employeeDirectory,UserAccountDirectory userAccountDirectory) {
         initComponents();
+        this.upc = upc;
+        this.employeeDirectory = employeeDirectory;
+        this.userAccountDirectory = userAccountDirectory;
     }
 
     /**
@@ -35,8 +48,18 @@ public class AdminWAJPanel extends javax.swing.JPanel {
         jLabel1.setText("Admin Work Area");
 
         manageEmployeeJButton.setText("Manage Employee");
+        manageEmployeeJButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                manageEmployeeJButtonActionPerformed(evt);
+            }
+        });
 
         manageUserAccountJButton.setText("Manage UserAccount");
+        manageUserAccountJButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                manageUserAccountJButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -66,6 +89,22 @@ public class AdminWAJPanel extends javax.swing.JPanel {
                 .addContainerGap(327, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void manageEmployeeJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageEmployeeJButtonActionPerformed
+        // TODO add your handling code here:
+        ManageEmployeeJPanel mejp = new ManageEmployeeJPanel(upc,employeeDirectory);
+        upc.add("ManageEmployeeJPanel",mejp);
+        CardLayout layout = (CardLayout) upc.getLayout();
+        layout.next(upc);
+    }//GEN-LAST:event_manageEmployeeJButtonActionPerformed
+
+    private void manageUserAccountJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageUserAccountJButtonActionPerformed
+        // TODO add your handling code here:
+        ManageUserAccountJPanel muajp = new ManageUserAccountJPanel(upc,employeeDirectory,userAccountDirectory);
+        upc.add("ManageUserAccountJPanel",muajp);
+        CardLayout layout = (CardLayout) upc.getLayout();
+        layout.next(upc);
+    }//GEN-LAST:event_manageUserAccountJButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

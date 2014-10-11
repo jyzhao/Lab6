@@ -5,6 +5,17 @@
  */
 package UserInterface;
 
+import Business.Business;
+import Business.ConfigureBusiness;
+import Business.UserAccountDirectory;
+import Business.EmployeeDirectory;
+import Business.UserAccount;
+import UserInterface.AdminWA.AdminWAJPanel;
+import UserInterface.EmployeeWA.EmployeeWAJPanel;
+import java.awt.CardLayout;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
 /**
  *
  * @author zhaojiyuan
@@ -14,8 +25,15 @@ public class MainJFrame extends javax.swing.JFrame {
     /**
      * Creates new form MainJFrame
      */
+    Business business;
+    UserAccountDirectory userAccountDirectory;
+    EmployeeDirectory employeeDirectory;
+
     public MainJFrame() {
         initComponents();
+        business = ConfigureBusiness.initialize();
+        userAccountDirectory = business.getUserAccountDirectory();
+        employeeDirectory = business.getEmployeeDirectory();
     }
 
     /**
@@ -33,7 +51,7 @@ public class MainJFrame extends javax.swing.JFrame {
         userNameJTextField = new javax.swing.JTextField();
         passwordJPasswordField = new javax.swing.JPasswordField();
         loginJButton = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
+        userProcessContainer = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -43,6 +61,11 @@ public class MainJFrame extends javax.swing.JFrame {
         jLabel1.setText("UserName");
 
         loginJButton.setText("Login");
+        loginJButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loginJButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -79,18 +102,8 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jSplitPane1.setLeftComponent(jPanel1);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 499, Short.MAX_VALUE)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 554, Short.MAX_VALUE)
-        );
-
-        jSplitPane1.setRightComponent(jPanel2);
+        userProcessContainer.setLayout(new java.awt.CardLayout());
+        jSplitPane1.setRightComponent(userProcessContainer);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -105,6 +118,43 @@ public class MainJFrame extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void loginJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginJButtonActionPerformed
+        // TODO add your handling code here:
+        String username = userNameJTextField.getText();
+        String password = (String.valueOf(passwordJPasswordField.getPassword()));
+        boolean flag = true;
+
+        for (UserAccount ua : userAccountDirectory.getUserAccountList()) {
+            if ((ua.getUserName().equals(username)) && (ua.getPassword().equals(password))) {
+                if (ua.getRole().equals(UserAccount.ADMIN_ROLE)) {
+                    //show admin WA
+                    userProcessContainer.removeAll();
+                    AdminWAJPanel awajp = new AdminWAJPanel(userProcessContainer,employeeDirectory,userAccountDirectory);
+                    userProcessContainer.add("AdminWAJP", awajp);
+                    CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+                    layout.next(userProcessContainer);
+
+                    flag = false;
+                    break;
+
+                } else if (ua.getRole().equals(UserAccount.EMPLOYEE_ROLE)) {
+                    //show employee WA
+                    userProcessContainer.removeAll();
+                    EmployeeWAJPanel ewajp = new EmployeeWAJPanel(userProcessContainer,ua);
+                    userProcessContainer.add("EmployeeWAJP", ewajp);
+                    CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+                    layout.next(userProcessContainer);
+
+                    flag = false;
+                    break;
+                }
+            }
+        }
+        if (flag) {
+            JOptionPane.showMessageDialog(null, "Please enter a valid username and password !!!");
+        }
+    }//GEN-LAST:event_loginJButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -144,10 +194,10 @@ public class MainJFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JButton loginJButton;
     private javax.swing.JPasswordField passwordJPasswordField;
     private javax.swing.JTextField userNameJTextField;
+    private javax.swing.JPanel userProcessContainer;
     // End of variables declaration//GEN-END:variables
 }

@@ -13,7 +13,7 @@ public class ConfigureBusiness {
     public static Business initialize() {
         Business business = Business.getInstance();
         
-        Employee e1 = business.getEmplyeeDirectory().addNewEmployee();
+        Employee e1 = business.getEmployeeDirectory().addNewEmployee();
         e1.setFirstName("Jiyuan");
         e1.setLastName("Zhao");
         e1.setOrganization("NEU");
@@ -25,7 +25,7 @@ public class ConfigureBusiness {
         ua.setUserName("admin");
         ua.setPassword("admin");
         
-        Employee e2 = business.getEmplyeeDirectory().addNewEmployee();
+        Employee e2 = business.getEmployeeDirectory().addNewEmployee();
         e2.setFirstName("Andrew");
         e2.setLastName("Chao");
         e2.setOrganization("NEU");

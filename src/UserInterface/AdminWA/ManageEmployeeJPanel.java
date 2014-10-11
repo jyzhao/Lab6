@@ -5,6 +5,12 @@
  */
 package UserInterface.AdminWA;
 
+import Business.Employee;
+import Business.EmployeeDirectory;
+import java.awt.CardLayout;
+import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author zhaojiyuan
@@ -14,8 +20,30 @@ public class ManageEmployeeJPanel extends javax.swing.JPanel {
     /**
      * Creates new form ManageEmployeeJPanel
      */
-    public ManageEmployeeJPanel() {
+    JPanel upc;
+    EmployeeDirectory employeeDirectory;
+
+    public ManageEmployeeJPanel(JPanel upc, EmployeeDirectory employeeDirectory) {
         initComponents();
+        this.upc = upc;
+        this.employeeDirectory = employeeDirectory;
+
+        populateEmployeeTable();
+
+    }
+
+    private void populateEmployeeTable() {
+        DefaultTableModel dtm = (DefaultTableModel) employeeJTable.getModel();
+        dtm.setRowCount(0);
+        for (Employee e : employeeDirectory.getEmployeeList()) {
+            Object row[] = new Object[4];
+            row[0] = e;
+            row[1] = e.getLastName();
+            row[2] = e.getEmpID();
+            row[3] = e.getOrganization();
+
+            dtm.addRow(row);
+        }
     }
 
     /**
@@ -29,11 +57,14 @@ public class ManageEmployeeJPanel extends javax.swing.JPanel {
 
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        employeeJTable = new javax.swing.JTable();
+        refreshJButton = new javax.swing.JButton();
+        addEmployeeJButton = new javax.swing.JButton();
+        backJButton = new javax.swing.JButton();
 
         jLabel1.setText("Manage Employee");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        employeeJTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -49,13 +80,34 @@ public class ManageEmployeeJPanel extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setResizable(false);
-            jTable1.getColumnModel().getColumn(1).setResizable(false);
-            jTable1.getColumnModel().getColumn(2).setResizable(false);
-            jTable1.getColumnModel().getColumn(3).setResizable(false);
+        jScrollPane1.setViewportView(employeeJTable);
+        if (employeeJTable.getColumnModel().getColumnCount() > 0) {
+            employeeJTable.getColumnModel().getColumn(0).setResizable(false);
+            employeeJTable.getColumnModel().getColumn(1).setResizable(false);
+            employeeJTable.getColumnModel().getColumn(2).setResizable(false);
+            employeeJTable.getColumnModel().getColumn(3).setResizable(false);
         }
+
+        refreshJButton.setText("Refresh");
+        refreshJButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refreshJButtonActionPerformed(evt);
+            }
+        });
+
+        addEmployeeJButton.setText("Add Employee");
+        addEmployeeJButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addEmployeeJButtonActionPerformed(evt);
+            }
+        });
+
+        backJButton.setText("<<Back");
+        backJButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backJButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -68,7 +120,14 @@ public class ManageEmployeeJPanel extends javax.swing.JPanel {
                         .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(147, 147, 147)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(backJButton)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(refreshJButton)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(addEmployeeJButton))
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(159, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -78,14 +137,43 @@ public class ManageEmployeeJPanel extends javax.swing.JPanel {
                 .addComponent(jLabel1)
                 .addGap(33, 33, 33)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(288, Short.MAX_VALUE))
+                .addGap(46, 46, 46)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(refreshJButton)
+                    .addComponent(addEmployeeJButton))
+                .addGap(76, 76, 76)
+                .addComponent(backJButton)
+                .addContainerGap(108, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void refreshJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshJButtonActionPerformed
+        // TODO add your handling code here:
+        populateEmployeeTable();
+
+    }//GEN-LAST:event_refreshJButtonActionPerformed
+
+    private void addEmployeeJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEmployeeJButtonActionPerformed
+        // TODO add your handling code here:
+        AddEmployeeJPanel addEmployeeJPanel = new AddEmployeeJPanel(upc,employeeDirectory);
+        upc.add("AddEmployeeJP",addEmployeeJPanel);
+        CardLayout layout = (CardLayout)upc.getLayout();
+        layout.next(upc);
+    }//GEN-LAST:event_addEmployeeJButtonActionPerformed
+
+    private void backJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backJButtonActionPerformed
+        // TODO add your handling code here:
+        upc.remove(this);
+        ((CardLayout)upc.getLayout()).previous(upc);
+    }//GEN-LAST:event_backJButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addEmployeeJButton;
+    private javax.swing.JButton backJButton;
+    private javax.swing.JTable employeeJTable;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JButton refreshJButton;
     // End of variables declaration//GEN-END:variables
 }
